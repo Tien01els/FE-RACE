@@ -1,5 +1,10 @@
+import Filters from '../../components/Filters';
 
 export default function Dashboard() {
-    return <></>
+    return (
+        <div>
+            <Filters/>
+        </div>
+    );
 }
 
