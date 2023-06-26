@@ -7,7 +7,7 @@ export default function ButtonAppBar() {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
-                <Toolbar sx={{ minHeight: '48px !important', paddingLeft: '3rem !important' }} className="bg-[#e10600]">
+                <Toolbar id="top-bar" sx={{ minHeight: '48px !important', paddingLeft: '3rem !important' }} className="bg-[#e10600]">
                     {/* <h1 className="font-sans text-2xl font-bold text-white-500 uppercase ">
                         Formula1
                     </h1> */}

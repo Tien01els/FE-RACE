@@ -21,3 +21,8 @@ export interface ITablePaginationActionsProps {
         newPage: number,
     ) => void;
 }
+
+export interface IProps {
+    window?: () => Window;
+    children: React.ReactElement;
+}
