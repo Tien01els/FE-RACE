@@ -14,11 +14,14 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
     const prevKey = useRef<string>(apiType === 'team' ? `${keyId}` : `${keyId}/${keyName}`);
     const isFirst = useRef<boolean>(true);
 
-    const [years, setYears] = useState<string[]>([]);
+    const [years, setYears] = useState<IAutoCompleteOption[]>([]);
     const [apiTypes, setApiTypes] = useState<IAutoCompleteOption[]>([]);
     const [keys, setKeys] = useState<IAutoCompleteOption[]>([]);
 
-    const [currentYear, setCurrentYear] = useState<string | null | undefined>(year || '2023');
+    const [currentYear, setCurrentYear] = useState<IAutoCompleteOption | null | undefined>(() => {
+        const year = prevApiType.current || '2023';
+        return { id: year, label: year };
+    });
     const [currentApiType, setCurrentApiType] = useState<IAutoCompleteOption | null | undefined>(() => {
         const idApiType = prevApiType.current || 'races'
         const labelApiType = prevApiType.current === 'team' ? 'TEAMS' : prevApiType.current === 'fastest-laps' ? 'DHL FASTEST LAP AWARD' : prevApiType.current.toUpperCase() || 'RACES'
@@ -44,12 +47,14 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
                 const response = await axios.get(
                     `${proxyURL}${formulaURL}`
                 );
-                console.log(formulaURL)
                 const $ = cheerio.load(response.data);
 
                 const years = $(`a[data-name="year"]`)
                     .map((_, element) => {
-                        const valueYear = element.attribs["data-value"]
+                        const valueYear: IAutoCompleteOption = {
+                            id: element.attribs["data-value"],
+                            label: element.attribs["data-value"]
+                        }
                         return valueYear
                     }).get()
                 setYears(years)
@@ -76,6 +81,7 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
                             return valueKey
                         }).get()
                     setKeys(keys)
+
                     const informationHead = $(`.resultsarchive-table`)
                         .first()
                         .find("thead th:not(.limiter)")
@@ -129,19 +135,20 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
     useEffect(() => {
         if (!isFirst.current) {
             if (currentYear && currentApiType && currentApiType.id && currentKey && currentKey.id) {
-                navigate(`/${currentYear}/${currentApiType.id}/${currentKey.id}`);
+                navigate(`/${currentYear.id}/${currentApiType.id}/${currentKey.id}`);
             } else if (currentYear && currentApiType && currentApiType.id) {
-                navigate(`/${currentYear}/${currentApiType.id}`);
+                navigate(`/${currentYear.id}/${currentApiType.id}`);
             } else if (currentYear) {
-                navigate(`/${currentYear}`);
+                navigate(`/${currentYear.id}`);
             }
         }
     }, [currentYear, currentApiType, currentKey, navigate]);
 
     useEffect(() => {
         if (isFirst && isFirst.current && years.length && apiTypes.length && keys.length) {
-            if (prevYear && years.includes(prevYear.current)) {
-                setCurrentYear(year)
+            const yearFinded = years.find(year => year.id === prevYear.current)
+            if (yearFinded) {
+                setCurrentYear(yearFinded)
             }
             const apiTypeFinded = apiTypes.find(apiTypeValue => apiTypeValue.id === prevApiType.current)
             if (apiTypeFinded) {
@@ -167,8 +174,8 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
                     renderInput={(params) => <TextField {...params} label="Year" />}
                     isOptionEqualToValue={(option, value) => option === value}
                     value={currentYear}
-                    onChange={(event: any, newValue: string | null) => {
-                        if (currentYear && newValue !== currentYear) {
+                    onChange={(event: any, newValue: IAutoCompleteOption | null) => {
+                        if (currentYear && newValue && newValue.id !== currentYear.id) {
                             setCurrentYear(newValue)
                             const idKey = currentApiType && currentApiType.id && currentApiType.id !== 'races' ? 'all' : ''
                             setCurrentKey({ id: idKey, label: 'ALL' })
@@ -198,7 +205,7 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
                         id="combo-box-demo"
                         options={keys}
                         sx={{ width: '100%' }}
-                        renderInput={(params) => <TextField {...params} label="Races" />}
+                        renderInput={(params) => <TextField {...params} label="" />}
                         value={currentKey}
                         isOptionEqualToValue={(option, value) => option.id === value.id && option.label === value.label}
                         onChange={(event: any, newValue: IAutoCompleteOption | null) => {

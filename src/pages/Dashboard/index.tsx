@@ -1,9 +1,10 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Filters from '../../components/Filters';
 import ArchiveTable from '../../components/ArchiveTable';
+import GraphRanking from '../../components/GraphRanking';
 import { IInformationTable } from '../../interface';
 import Header from '../../components/Header';
 
@@ -28,7 +29,10 @@ export default function Dashboard() {
                 setInformationOfFormula={setInformationOfFormula}
             />
             {shouldRender ? informationOfFormula?.bodyInfo.length ?
-                <ArchiveTable informationOfFormula={informationOfFormula} />
+                <div>
+                    <ArchiveTable informationOfFormula={informationOfFormula} />
+                    <GraphRanking informationOfFormula={informationOfFormula} />
+                </div>
                 : <span className='flex justify-center text-center'>No results are currently available</span>
                 : <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><CircularProgress /></Box>
             }
