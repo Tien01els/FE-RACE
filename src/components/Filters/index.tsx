@@ -43,7 +43,7 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
             try {
                 // const proxyURL = `https://api.allorigins.win/raw?url=`
                 const proxyURL = `https://cors-get-proxy.sirjosh.workers.dev/?url=`
-                const formulaURL = `https://www.formula1.com/en/results.html/${currentYear}${(currentApiType && currentApiType.id && '/' + currentApiType.id) || ""}${(currentKey && currentKey.id && '/' + currentKey.id) || ""}.html`
+                const formulaURL = `https://www.formula1.com/en/results.html/${currentYear && currentYear.id}${(currentApiType && currentApiType.id && '/' + currentApiType.id) || ""}${(currentKey && currentKey.id && '/' + currentKey.id) || ""}.html`
                 const response = await axios.get(
                     `${proxyURL}${formulaURL}`
                 );
@@ -117,8 +117,8 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
                                     return $(elementTd).text().trim()
                                 }).get()]
                             }).get()
-
                         }).get();
+
                     props.setInformationOfFormula({
                         headInfo: informationHead,
                         bodyInfo: informationBody
@@ -172,7 +172,7 @@ export default function Filters(props: { setInformationOfFormula: (details: IInf
                     options={years}
                     sx={{ width: '100%' }}
                     renderInput={(params) => <TextField {...params} label="Year" />}
-                    isOptionEqualToValue={(option, value) => option === value}
+                    isOptionEqualToValue={(option, value) => option.id === value.id && option.label === value.label}
                     value={currentYear}
                     onChange={(event: any, newValue: IAutoCompleteOption | null) => {
                         if (currentYear && newValue && newValue.id !== currentYear.id) {
