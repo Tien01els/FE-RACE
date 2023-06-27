@@ -15,27 +15,16 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import { IInformationTable } from '../../interface';
-
+import { IInformationTable, ITablePaginationActionsProps } from '../../interface';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-        backgroundColor: '#8e918f',
+        backgroundColor: '#e10600',
         color: theme.palette.common.white,
     }
 }));
 
-interface TablePaginationActionsProps {
-    count: number;
-    page: number;
-    rowsPerPage: number;
-    onPageChange: (
-        event: React.MouseEvent<HTMLButtonElement>,
-        newPage: number,
-    ) => void;
-}
-
-function TablePaginationActions(props: TablePaginationActionsProps) {
+function TablePaginationActions(props: ITablePaginationActionsProps) {
     const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange } = props;
 
