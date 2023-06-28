@@ -11,8 +11,8 @@ https://nodejs.org/en/blog/release/v14.18.1
 - ReactJS
 
 ## How to run the project on local (Follow the sequence)
-### Front-End 
-1. Go to frontend folder, then type **"npm i"** in the terminal to install all the necessary libraries.
+### Front-end 
+1. Go to FE-RACE folder, then type **"npm i"** in the terminal to install all the necessary libraries.
 2. Then type: **"npm start"** to run the Front-end.
 3. The Front-end will start on http://localhost:3000
 ## Screenshots
